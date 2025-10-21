@@ -1,9 +1,9 @@
 #ifndef BALL_HPP
 #define BALL_HPP 
 
-#include "pong.hpp"
+#include "raylib_backend.hpp"
 #include "utilities.hpp"
-#include "Block.hpp"
+#include "block.hpp"
 
 class Ball
 {

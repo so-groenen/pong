@@ -1,7 +1,7 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
 
-#include "Block.hpp"
+#include "block.hpp"
 #include "ball.hpp"
 #include <cmath>
 

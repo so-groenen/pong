@@ -1,7 +1,7 @@
 #ifndef PLAYERS_HPP
 #define PLAYERS_HPP
 
-#include "pong.hpp"
+#include "raylib_backend.hpp"
 #include "utilities.hpp"
 
 class Block
