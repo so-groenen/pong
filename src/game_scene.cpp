@@ -17,17 +17,19 @@ void randomize_dir(raylib::Vector2& vec)
     vec.x = r*cosf(theta);
     vec.y = r*sinf(theta);
 }
-GamePlayScene::GamePlayScene(raylib::Color bg_color, Difficulty difficulty)
-:  m_background_color{bg_color} //, m_difficulty{difficulty}
+
+
+
+
+GamePlayScene::GamePlayScene(Difficulty difficulty)
 {
     if(!raylib::IsWindowReady())
     {
         throw std::runtime_error("Game creation error: Window not ready!\n");
     }
-
     m_win_width  = to_float(raylib::GetScreenWidth());
     m_win_height = to_float(raylib::GetScreenHeight());
-
+ 
 
     // set player block
     raylib::Vector2 player_pos{0.05f*m_win_width, 0.5f*m_win_height};
@@ -45,7 +47,8 @@ GamePlayScene::GamePlayScene(raylib::Color bg_color, Difficulty difficulty)
     const int ball_radius {to_int(0.025f*m_win_height)}; // Ball texture size is in int, therefor having "integer valued" floats makes life easier
     raylib::Vector2 easy_ball_vel{-4.f, 5.5f};
     
-    m_ball = std::move(Ball{easy_ball_vel, raylib::WHITE, to_float(ball_radius)});  // we need to move the texture resource. if we copy it, the original will unload the rendertexutre and we can not use it.
+    m_ball = Ball{easy_ball_vel, raylib::WHITE, to_float(ball_radius)};  // we need to move the texture resource. if we copy it, the original will unload the rendertexutre and we can not use it.
+    
     float enemy_velocity{}; 
     float line_of_sight{};
     raylib::Vector2 ball_velocity{};
@@ -77,7 +80,6 @@ GamePlayScene::GamePlayScene(raylib::Color bg_color, Difficulty difficulty)
     m_ball.set_velocity(ball_velocity);
 
     std::println("{}, vel = {}", diff_name, m_enemy.vertical_velocity());
-
 }
 void GamePlayScene::update_logic()
 {
@@ -120,13 +122,9 @@ void GamePlayScene::update_logic()
 
 void GamePlayScene::draw() const 
 {
-    raylib::draw([&]
-    {
-        raylib::ClearBackground(m_background_color);
-        m_player.draw();
-        m_enemy.draw();
-        m_ball.draw();
-    });
+    m_player.draw();
+    m_enemy.draw();
+    m_ball.draw();
 }
 bool GamePlayScene::is_finished() const 
 {
@@ -134,8 +132,7 @@ bool GamePlayScene::is_finished() const
 }
 auto GamePlayScene::on_exit() -> std::unique_ptr<IGameScene>
 {
-    raylib::Color ending_bg_color = m_background_color;
-    return std::make_unique<EndingScene>(has_won(), ending_bg_color);
+    return std::make_unique<EndingScene>(has_won());
 }
 bool GamePlayScene::has_won() const 
 {

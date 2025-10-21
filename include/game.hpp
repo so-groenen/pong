@@ -8,6 +8,7 @@
 class Game 
 {
     std::unique_ptr<IGameScene> m_scene{};
+    raylib::Camera2D m_camera{};
 public:
     Game();
     void run();

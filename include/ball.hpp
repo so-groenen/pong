@@ -24,31 +24,23 @@ class Ball
     float m_radius{};
     float m_win_width{};
     float m_win_height{};
-    bool is_below(float bottom) const
+    inline bool is_below(float bottom) const
     {
-        bool center_is_below = (m_position.y             < bottom);
-        // bool is_touching    = (m_position.y + m_radius >= bottom);
-        return (center_is_below);// && is_touching);
+        return (m_position.y < bottom); 
     }
-    bool is_above(float top) const
+    inline bool is_above(float top) const
     {
-        bool center_is_above = (m_position.y            > top);
-        // bool is_touching     = (m_position.y + m_radius < top);
-        return (center_is_above);// && is_touching);
+        return (m_position.y > top);
     }
-    bool is_left(float left) const
+    inline bool is_left(float left) const
     {
-        bool center_is_left = (m_position.x            < left);
-        bool is_touching    = (m_position.x + m_radius > left);
-        return (center_is_left && is_touching);
+        return (m_position.x < left);
     }
-    bool is_right(float right) const
+    inline bool is_right(float right) const
     {
-        bool center_is_right = (m_position.x            >= right);
-        bool is_touching     = (m_position.x - m_radius < right);
-        return (center_is_right && is_touching);
+        return (m_position.x >= right);
     }
-    raylib::Vector2 next_pos() const 
+    inline raylib::Vector2 next_pos() const 
     {
         return {m_position.x + m_velocity.x,m_position.y + m_velocity.y};
     }
@@ -107,7 +99,7 @@ public:
     }
     void check_wall_collision()
     {
-        if (m_position.y <= m_radius || m_position.y >= (m_win_height - m_radius) )
+        if (next_pos().y <= m_radius || next_pos().y >= (m_win_height - m_radius) )
         {
             m_velocity.y *= -1;
         }

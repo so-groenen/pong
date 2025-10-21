@@ -7,44 +7,38 @@ const char* Medium    {"Medium"};
 const char* Difficult {"Difficult"};
 
 constexpr float TEXTSPACING     {5};
-constexpr float TITLE_FONTSIZE  {40};
-constexpr float SELECT_FONTSIZE {30};
+constexpr float TITLE_FONTSIZE  {120};
+constexpr float SELECT_FONTSIZE {50};
  
  
-MenuCanvas::MenuCanvas(const char* title,  raylib::Color bg_color)
-    : backgroundColor{bg_color}, 
-    easy_size     {raylib::MeasureTextEx(font, Easy, SELECT_FONTSIZE, TEXTSPACING)},
+MenuCanvas::MenuCanvas(const char* title)
+    : easy_size     {raylib::MeasureTextEx(font, Easy, SELECT_FONTSIZE, TEXTSPACING)},
     medium_size   {raylib::MeasureTextEx(font, Medium, SELECT_FONTSIZE, TEXTSPACING)},
     difficult_size{raylib::MeasureTextEx(font, Difficult, SELECT_FONTSIZE, TEXTSPACING)},
-    title_txt_size{raylib::MeasureTextEx(font, title, SELECT_FONTSIZE, TEXTSPACING)}
+    title_txt_size{raylib::MeasureTextEx(font, title, TITLE_FONTSIZE, TEXTSPACING)}
 {
 }
 raylib::Vector2 MenuCanvas::title_pos() const
 {
     return raylib::Vector2{(win_width-title_txt_size.x)/2, (0.1f)*win_height};
 }
-void  MenuCanvas::draw(size_t index) const 
+void MenuCanvas::draw(size_t index) const 
 {
     static auto position = raylib::Vector2{(win_width-title_txt_size.x)/2, (0.1f)*win_height};
+    raylib::DrawTextEx(font, TITLE, position, TITLE_FONTSIZE, TEXTSPACING, raylib::BLACK);
+    raylib::DrawRectangleLinesEx(selections.at(index), thickness, raylib::BLACK);
     
-    raylib::draw([&]
-    {
-        raylib::ClearBackground(backgroundColor);
-        raylib::DrawTextEx(font, TITLE, position, TITLE_FONTSIZE, TEXTSPACING, raylib::BLACK);
-        raylib::DrawRectangleLinesEx(selections.at(index), thickness, raylib::BLACK);
-        
-        raylib::DrawTextEx(font, Easy,      position_easy, SELECT_FONTSIZE, TEXTSPACING, raylib::BLACK);
-        raylib::DrawTextEx(font, Medium,    position_med,  SELECT_FONTSIZE, TEXTSPACING, raylib::BLACK);
-        raylib::DrawTextEx(font, Difficult, position_dif,  SELECT_FONTSIZE, TEXTSPACING, raylib::BLACK);
-    });
+    raylib::DrawTextEx(font, Easy,      position_easy, SELECT_FONTSIZE, TEXTSPACING, raylib::BLACK);
+    raylib::DrawTextEx(font, Medium,    position_med,  SELECT_FONTSIZE, TEXTSPACING, raylib::BLACK);
+    raylib::DrawTextEx(font, Difficult, position_dif,  SELECT_FONTSIZE, TEXTSPACING, raylib::BLACK);
 }
 
  
  
 
 
-MenuScene::MenuScene(raylib::Color bg_color)
-    :  m_canvas{TITLE, bg_color}
+MenuScene::MenuScene()
+    :  m_canvas{TITLE}
 {
     if(!raylib::IsWindowReady())
     {
@@ -80,6 +74,6 @@ Difficulty MenuScene::get_difficulty() const
 }
 auto MenuScene::on_exit() -> std::unique_ptr<IGameScene>  
 {
-    raylib::Color bg_color = m_canvas.backgroundColor;
-    return std::make_unique<GamePlayScene>(bg_color, get_difficulty());
+    // raylib::Color bg_color = m_canvas.background_color;
+    return std::make_unique<GamePlayScene>(get_difficulty());
 }

@@ -21,7 +21,7 @@ public:
     }
     void move(const Ball& ball)
     {
-        if ( fabs(ball.position().x-center().x) < m_line_of_sight )
+        if (fabs(ball.position().x-center().x) < m_line_of_sight )
         {
             if (ball.position().y < center().y)
             {

@@ -1,7 +1,7 @@
 #ifndef UTILITIES_HPP
 #define UTILITIES_HPP
 #include <iostream>
-
+#include "raylib_backend.hpp"
 
 template<typename T>
 constexpr float to_float(const T value) requires std::floating_point<T> || std::integral<T>
@@ -19,5 +19,11 @@ constexpr int to_size_t(const T value)  requires std::floating_point<T> || std::
 {
     return static_cast<size_t>(value);
 }
+
+ 
+
+
+
+
 
 #endif
