@@ -56,14 +56,7 @@ if ("${PLATFORM}" STREQUAL "Web")
         TARGET Pong POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE_DIR:Pong>/Pong.wasm ${CMAKE_SOURCE_DIR}/docs/Pong.wasm
     )
-    # add_custom_command(
-    #     TARGET Pong POST_BUILD
-    #     COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE_DIR:Pong>  ${CMAKE_SOURCE_DIR}/docs
-    # )
-    # add_custom_command(
-    #     TARGET Pong POST_BUILD
-    #     COMMAND ${CMAKE_COMMAND} -E copy  ${CMAKE_SOURCE_DIR}/Pong.html ${CMAKE_SOURCE_DIR}/index.html
-    # )
+ 
     target_link_options(Pong PRIVATE
                         -sUSE_GLFW=3
                         -sALLOW_MEMORY_GROWTH

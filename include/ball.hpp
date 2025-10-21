@@ -6,6 +6,8 @@
 #include "block.hpp"
 #include <print>
 
+constexpr float DRIFT_COEFF {0.3f};
+
 inline void swap_texture(raylib::RenderTexture2D& t1, raylib::RenderTexture2D& t2)
 {
     raylib::RenderTexture2D temp = t1;
@@ -25,28 +27,31 @@ class Ball
     bool is_below(float bottom) const
     {
         bool center_is_below = (m_position.y             < bottom);
-        bool is_touching    = (m_position.y + m_radius >= bottom);
-        return (center_is_below && is_touching);
+        // bool is_touching    = (m_position.y + m_radius >= bottom);
+        return (center_is_below);// && is_touching);
     }
     bool is_above(float top) const
     {
-        bool center_is_above = (m_position.y             > top);
-        bool is_touching     = (m_position.y + m_radius <= top);
-        return (center_is_above && is_touching);
+        bool center_is_above = (m_position.y            > top);
+        // bool is_touching     = (m_position.y + m_radius < top);
+        return (center_is_above);// && is_touching);
     }
     bool is_left(float left) const
     {
-        bool center_is_left = (m_position.x             < left);
-        bool is_touching    = (m_position.x + m_radius >= left);
+        bool center_is_left = (m_position.x            < left);
+        bool is_touching    = (m_position.x + m_radius > left);
         return (center_is_left && is_touching);
     }
     bool is_right(float right) const
     {
-        bool center_is_right = (m_position.x             > right);
-        bool is_touching     = (m_position.x - m_radius <= right);
+        bool center_is_right = (m_position.x            >= right);
+        bool is_touching     = (m_position.x - m_radius < right);
         return (center_is_right && is_touching);
     }
-
+    raylib::Vector2 next_pos() const 
+    {
+        return {m_position.x + m_velocity.x,m_position.y + m_velocity.y};
+    }
 public: 
     explicit Ball(raylib::Vector2 velocity = (raylib::Vector2){5.f,5.f}, raylib::Color color = raylib::VIOLET, float r = 10)
         : m_velocity{velocity}, m_color{color}, m_radius{r}
@@ -66,9 +71,12 @@ public:
             raylib::ClearBackground(raylib::BLANK);
             raylib::DrawCircle(to_int(m_radius), to_int(m_radius), m_radius, m_color);
         raylib::EndTextureMode();
-        std::println("Ball texture created!");
+        std::println("Ball texture created: size: {}x{}, rad: {}", m_render_tex.texture.width,m_render_tex.texture.height, m_radius);
     }
-
+    void set_position(raylib::Vector2 pos)
+    {
+        m_position = pos;
+    }
     Ball(const Ball& other)            = delete; // No copy! Otherwise we run into trouble when one gets destroyed and releases the render texture
     Ball& operator=(const Ball& other) = delete; // same.
     Ball& operator=(Ball&& other)                // only move allowed.
@@ -89,8 +97,8 @@ public:
     void draw() const
     {
         raylib::DrawTexture(m_render_tex.texture, 
-                            m_position.x - m_radius,
-                            m_position.y - m_radius,
+                            m_position.x - m_render_tex.texture.width/2.f,
+                            m_position.y - m_render_tex.texture.height/2.f,
                             raylib::WHITE);
     }
     void set_velocity(raylib::Vector2 vel)
@@ -99,10 +107,6 @@ public:
     }
     void check_wall_collision()
     {
-        // if (m_position.x <= m_radius || m_position.x >= (m_win_width - m_radius) )
-        // {
-        //     m_velocity.x *= -1;
-        // }
         if (m_position.y <= m_radius || m_position.y >= (m_win_height - m_radius) )
         {
             m_velocity.y *= -1;
@@ -110,7 +114,7 @@ public:
     }
     void check_block_collision(const Block& block)
     {
-        if (raylib::CheckCollisionCircleRec(m_position, m_radius, block.rect()))
+        if (raylib::CheckCollisionCircleRec(next_pos(), m_radius, block.rect()))
         {   
             float x_left   = block.rect().x;
             float x_right  = block.rect().x + block.rect().width;
@@ -130,9 +134,10 @@ public:
                 if (m_velocity.x < 0)
                 {
                     m_velocity.x *= -1;
-                }                
+                }
             }
-            else if(is_below(y_bottom))
+
+            if(is_below(y_bottom))
             {
                 m_position.y  = y_bottom - m_radius;
                 if (m_velocity.y > 0)
@@ -148,6 +153,7 @@ public:
                     m_velocity.y *= -1;
                 }                
             } 
+            m_velocity.y += DRIFT_COEFF * block.vertical_velocity();
         }
     }
     void move()

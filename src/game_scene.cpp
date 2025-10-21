@@ -4,7 +4,19 @@
 
 using namespace std::literals::string_view_literals;
 
+raylib::Vector2 get_scaled_vec(raylib::Vector2 vec, float s)
+{
+    return  {s*vec.x, s*vec.y};
+}
 
+void randomize_dir(raylib::Vector2& vec)
+{
+    float r{sqrtf(vec.x*vec.x + vec.y*vec.y)};
+
+    auto theta  = to_float(raylib::GetRandomValue(0, 2*PI));
+    vec.x = r*cosf(theta);
+    vec.y = r*sinf(theta);
+}
 GamePlayScene::GamePlayScene(raylib::Color bg_color, Difficulty difficulty)
 :  m_background_color{bg_color} //, m_difficulty{difficulty}
 {
@@ -24,39 +36,47 @@ GamePlayScene::GamePlayScene(raylib::Color bg_color, Difficulty difficulty)
 
 
     // Set enemy block
-    float line_of_sight = m_win_width/2;
     raylib::Vector2 enemy_pos{m_win_width - (m_player.rect().x + m_player.rect().width), 0.5f*m_win_height};
-    m_enemy = EnemyBlock{enemy_pos, line_of_sight};
+    m_enemy = EnemyBlock{enemy_pos};
     m_enemy.set_color(raylib::BLUE);
 
 
     // set Ball
-    const float ball_radius {0.025f*m_win_height}; 
-    raylib::Vector2 ball_vel{-3.f, 2.f};
+    const int ball_radius {to_int(0.025f*m_win_height)}; // Ball texture size is in int, therefor having "integer valued" floats makes life easier
+    raylib::Vector2 easy_ball_vel{-4.f, 5.5f};
     
-    m_ball = std::move(Ball{ball_vel, raylib::GRAY, ball_radius});  // we need to move the texture resource. if we copy it, the original will unload the rendertexutre and we can not use it.
-
+    m_ball = std::move(Ball{easy_ball_vel, raylib::WHITE, to_float(ball_radius)});  // we need to move the texture resource. if we copy it, the original will unload the rendertexutre and we can not use it.
     float enemy_velocity{}; 
-
+    float line_of_sight{};
+    raylib::Vector2 ball_velocity{};
     std::string_view diff_name{};
     switch (difficulty)
     {
-    case Difficulty::EASY:
+    case Difficulty::Easy:
         diff_name      = "Easy Mode!"sv;
         enemy_velocity = 0.0095;
+        ball_velocity  = easy_ball_vel;
+        line_of_sight  = m_win_width/4.f;
         break;
-    case Difficulty::MEDIUM:
+    case Difficulty::Medium:
         enemy_velocity = 0.01;
         diff_name      = "Medium Mode!"sv;
+        ball_velocity  = get_scaled_vec(easy_ball_vel, 1.2f);
+        line_of_sight  = m_win_width/3.f;
         break;
-    case Difficulty::DIFFICULT:
+    case Difficulty::Difficult:
         diff_name      = "Difficult Mode!"sv;
         enemy_velocity = 0.015;
+        ball_velocity  = get_scaled_vec(easy_ball_vel, 2.5f);
+        line_of_sight  = m_win_width/2.f;
         break;
     }
     m_enemy.set_velocity(enemy_velocity);
-    std::println("{}, vel = {}", diff_name, m_enemy.velocity());
-    m_ball.reset_position();
+    m_enemy.set_line_of_sight(line_of_sight);
+    randomize_dir(ball_velocity);
+    m_ball.set_velocity(ball_velocity);
+
+    std::println("{}, vel = {}", diff_name, m_enemy.vertical_velocity());
 
 }
 void GamePlayScene::update_logic()
@@ -69,6 +89,10 @@ void GamePlayScene::update_logic()
     if (raylib::IsKeyDown(raylib::KEY_DOWN))
     {
         m_player.move_down();
+    }
+    else
+    {
+        m_player.stand_still();
     }
 
     // update collisions

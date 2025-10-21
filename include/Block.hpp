@@ -4,23 +4,22 @@
 #include "raylib_backend.hpp"
 #include "utilities.hpp"
 
-constexpr float BLOCK_WIDTH_RATIO      {0.025f}; // x windows width
-constexpr float BLOCK_HEIGHT_RATIO     {0.4f};   // x windows height
+constexpr float BLOCK_WIDTH_RATIO      {0.05f}; // x windows width
+constexpr float BLOCK_HEIGHT_RATIO     {0.5f};   // x windows height
 constexpr float DEFAULT_VELOCITY_RATIO {0.02f};  // x windows height
 
 
 class Block
 {
-    // raylib::Vector2   m_position{};
     raylib::Color     m_color{raylib::VIOLET};
     raylib::Rectangle m_rect{};
     float m_win_height{};
     float m_win_width{};
     float m_delta_y{};   // By how much do we move?
+    int m_dir{};
 public:
     Block() = default;
     Block(raylib::Vector2 position)
-        // : m_position{position}
     {
         if(!raylib::IsWindowReady())
         {
@@ -42,14 +41,15 @@ public:
         {
             m_rect.y -= m_delta_y;
         }
+        m_dir = -1; //direction are inverted!
     }
     void set_color(raylib::Color color)
     {
         m_color = color;
     }
-    float velocity() const 
+    float vertical_velocity() const 
     {
-        return m_delta_y;
+        return m_dir*m_delta_y; 
     }
     void move_down()
     {
@@ -57,6 +57,11 @@ public:
         {
             m_rect.y += m_delta_y;
         }
+        m_dir = +1; //direction are inverted!
+    }
+    void stand_still()
+    {
+        m_dir = 0;
     }
     //velocity in [%_windows Height] pixel per 1/60 s. . 
     void set_velocity(float p)

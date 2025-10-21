@@ -50,9 +50,8 @@ private:
 
 class MenuScene : public IGameScene
 {
-    Difficulty m_difficulty{Difficulty::EASY};
+    Difficulty m_difficulty{Difficulty::Easy};
     MenuCanvas m_canvas;
-    size_t m_select_index{};
     bool m_is_finished{false};
 public:
     MenuScene(raylib::Color bg_color);

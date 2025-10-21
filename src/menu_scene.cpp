@@ -2,9 +2,9 @@
 #include "game_scene.hpp"
 
 const char* TITLE     {"Pong!"};
-const char* EASY      {"Easy"};
-const char* MEDIUM    {"Medium"};
-const char* DIFFICULT {"Difficult"};
+const char* Easy      {"Easy"};
+const char* Medium    {"Medium"};
+const char* Difficult {"Difficult"};
 
 constexpr float TEXTSPACING     {5};
 constexpr float TITLE_FONTSIZE  {40};
@@ -13,9 +13,9 @@ constexpr float SELECT_FONTSIZE {30};
  
 MenuCanvas::MenuCanvas(const char* title,  raylib::Color bg_color)
     : backgroundColor{bg_color}, 
-    easy_size     {raylib::MeasureTextEx(font, EASY, SELECT_FONTSIZE, TEXTSPACING)},
-    medium_size   {raylib::MeasureTextEx(font, MEDIUM, SELECT_FONTSIZE, TEXTSPACING)},
-    difficult_size{raylib::MeasureTextEx(font, DIFFICULT, SELECT_FONTSIZE, TEXTSPACING)},
+    easy_size     {raylib::MeasureTextEx(font, Easy, SELECT_FONTSIZE, TEXTSPACING)},
+    medium_size   {raylib::MeasureTextEx(font, Medium, SELECT_FONTSIZE, TEXTSPACING)},
+    difficult_size{raylib::MeasureTextEx(font, Difficult, SELECT_FONTSIZE, TEXTSPACING)},
     title_txt_size{raylib::MeasureTextEx(font, title, SELECT_FONTSIZE, TEXTSPACING)}
 {
 }
@@ -33,9 +33,9 @@ void  MenuCanvas::draw(size_t index) const
         raylib::DrawTextEx(font, TITLE, position, TITLE_FONTSIZE, TEXTSPACING, raylib::BLACK);
         raylib::DrawRectangleLinesEx(selections.at(index), thickness, raylib::BLACK);
         
-        raylib::DrawTextEx(font, EASY,      position_easy, SELECT_FONTSIZE, TEXTSPACING, raylib::BLACK);
-        raylib::DrawTextEx(font, MEDIUM,    position_med,  SELECT_FONTSIZE, TEXTSPACING, raylib::BLACK);
-        raylib::DrawTextEx(font, DIFFICULT, position_dif,  SELECT_FONTSIZE, TEXTSPACING, raylib::BLACK);
+        raylib::DrawTextEx(font, Easy,      position_easy, SELECT_FONTSIZE, TEXTSPACING, raylib::BLACK);
+        raylib::DrawTextEx(font, Medium,    position_med,  SELECT_FONTSIZE, TEXTSPACING, raylib::BLACK);
+        raylib::DrawTextEx(font, Difficult, position_dif,  SELECT_FONTSIZE, TEXTSPACING, raylib::BLACK);
     });
 }
 

@@ -15,7 +15,6 @@ class GamePlayScene : public IGameScene
     Block m_player{};
     EnemyBlock m_enemy{};
     Ball m_ball{};
-    // Difficulty m_difficulty{};
     float m_win_width{};
     float m_win_height{};
     bool m_has_won{};
