@@ -11,7 +11,7 @@ constexpr float DEFAULT_VELOCITY_RATIO {0.02f};  // x windows height
 
 class Block
 {
-    raylib::Vector2   m_position{};
+    // raylib::Vector2   m_position{};
     raylib::Color     m_color{raylib::VIOLET};
     raylib::Rectangle m_rect{};
     float m_win_height{};
@@ -20,7 +20,7 @@ class Block
 public:
     Block() = default;
     Block(raylib::Vector2 position)
-        : m_position{position}
+        // : m_position{position}
     {
         if(!raylib::IsWindowReady())
         {

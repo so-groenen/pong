@@ -6,7 +6,7 @@ using namespace std::literals::string_view_literals;
 
 
 GamePlayScene::GamePlayScene(raylib::Color bg_color, Difficulty difficulty)
-:  m_background_color{bg_color}, m_difficulty{difficulty}
+:  m_background_color{bg_color} //, m_difficulty{difficulty}
 {
     if(!raylib::IsWindowReady())
     {
@@ -16,10 +16,12 @@ GamePlayScene::GamePlayScene(raylib::Color bg_color, Difficulty difficulty)
     m_win_width  = to_float(raylib::GetScreenWidth());
     m_win_height = to_float(raylib::GetScreenHeight());
 
+
     // set player block
     raylib::Vector2 player_pos{0.05f*m_win_width, 0.5f*m_win_height};
     m_player = Block{player_pos};
     m_player.set_color(raylib::VIOLET);
+
 
     // Set enemy block
     float line_of_sight = m_win_width/2;
@@ -27,12 +29,13 @@ GamePlayScene::GamePlayScene(raylib::Color bg_color, Difficulty difficulty)
     m_enemy = EnemyBlock{enemy_pos, line_of_sight};
     m_enemy.set_color(raylib::BLUE);
 
+
     // set Ball
     const float ball_radius {0.025f*m_win_height}; 
-    raylib::Vector2 ball_vel{8, 8};
+    raylib::Vector2 ball_vel{-3.f, 2.f};
     
-    m_ball = std::move(Ball{ball_vel, ball_radius});  // we need to move the texture resource. if we copy it, the original will unload the rendertexutre and we can not use it.
-    
+    m_ball = std::move(Ball{ball_vel, raylib::GRAY, ball_radius});  // we need to move the texture resource. if we copy it, the original will unload the rendertexutre and we can not use it.
+
     float enemy_velocity{}; 
 
     std::string_view diff_name{};

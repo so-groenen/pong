@@ -30,26 +30,26 @@ class Ball
     }
     bool is_above(float top) const
     {
-        bool center_is_above  = (m_position.y             > top);
+        bool center_is_above = (m_position.y             > top);
         bool is_touching     = (m_position.y + m_radius <= top);
         return (center_is_above && is_touching);
     }
     bool is_left(float left) const
     {
-        bool center_is_left  = (m_position.x             < left);
+        bool center_is_left = (m_position.x             < left);
         bool is_touching    = (m_position.x + m_radius >= left);
         return (center_is_left && is_touching);
     }
     bool is_right(float right) const
     {
-        bool center_is_right  = (m_position.x             < right);
-        bool is_touching     = (m_position.x + m_radius >= right);
+        bool center_is_right = (m_position.x             > right);
+        bool is_touching     = (m_position.x - m_radius <= right);
         return (center_is_right && is_touching);
     }
 
-public:
-    explicit Ball(raylib::Vector2 velocity = (raylib::Vector2){5.f,5.f}, float r = 10)
-        : m_velocity{velocity}, m_radius{r}
+public: 
+    explicit Ball(raylib::Vector2 velocity = (raylib::Vector2){5.f,5.f}, raylib::Color color = raylib::VIOLET, float r = 10)
+        : m_velocity{velocity}, m_color{color}, m_radius{r}
     {
         if(!raylib::IsWindowReady())
         {

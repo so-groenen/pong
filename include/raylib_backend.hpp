@@ -7,7 +7,7 @@
 
 namespace raylib
 {
-    #include <raylib.h>
+    #include "raylib.h"
     
     template<typename F>
     inline void draw(F draw_func) 
