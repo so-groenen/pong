@@ -2,13 +2,6 @@
 #define GAME_SCENE_HPP
 #include <memory>
 
-enum class Scenes
-{
-    Menu,
-    Game,
-    End,
-};
-
 class IGameScene
 {
 public:
@@ -18,7 +11,6 @@ public:
     virtual bool is_finished() const = 0;
 };
 
- 
 
 
 #endif

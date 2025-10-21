@@ -7,25 +7,25 @@
 
 class EnemyBlock: public Block
 {
-    float m_lineOfsight{};
+    float m_line_of_sight{};
 public:
     EnemyBlock() = default;
-    EnemyBlock(raylib::Vector2 position, float lineOfSight)
-        :  Block{position}, m_lineOfsight{lineOfSight}
+    EnemyBlock(raylib::Vector2 position, float line_of_sight)
+        :  Block{position}, m_line_of_sight{line_of_sight}
     {
     }
     EnemyBlock& operator=(const EnemyBlock& other) = default;
     void move(const Ball& ball)
     {
-        if ( fabs(ball.getPos().x-getCenter().x) < m_lineOfsight )
+        if ( fabs(ball.position().x-center().x) < m_line_of_sight )
         {
-            if (ball.getPos().y < getCenter().y)
+            if (ball.position().y < center().y)
             {
-                moveUp();
+                move_up();
             }
-            if (ball.getPos().y > getCenter().y)
+            if (ball.position().y > center().y)
             {
-                moveDown();
+                move_down();
             }    
         }
     }
