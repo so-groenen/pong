@@ -1,0 +1,38 @@
+{
+    "version": 8,
+    "configurePresets": [
+        {
+            "name": "Emscripten Build with Ninja",
+            "displayName": "Emscripten Build with Ninja",
+            "description": "Building for web using Emscripten",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}\\build_web",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "CMAKE_POLICY_VERSION_MINIMUM": "3.5",
+                "CMAKE_TOOLCHAIN_FILE": "C:\\.emsdk\\upstream\\emscripten\\cmake\\Modules\\Platform\\Emscripten.cmake",
+                "PLATFORM": "Web",
+                "CMAKE_COLOR_DIAGNOSTICS": "ON"
+            },
+            "environment": {
+                "CLICOLOR_FORCE": "1"
+            }
+        },
+        {
+            "name": "clang",
+            "displayName": "Clang 21.1.1 x86_64-w64-windows-gnu (mingw64)",
+            "description": "Using compilers: CXX = C:\\msys64\\mingw64\\bin\\clang++.exe",
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build_desktop",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "C:/msys64/mingw64/bin/clang++.exe",
+                "CMAKE_BUILD_TYPE": "Release",
+                "PLATFORM": "Desktop",
+                "CMAKE_COLOR_DIAGNOSTICS": "ON"
+            },
+            "environment": {
+                "CLICOLOR_FORCE": "1"
+            }
+        }
+    ]
+}
