@@ -26,7 +26,7 @@ bool EndingScene::is_finished() const
 {
     return m_is_finished;
 } 
-void EndingScene::update_logic()
+void EndingScene::update_logic(float dt)
 {
     if (raylib::IsKeyPressed(raylib::KEY_SPACE))
     {

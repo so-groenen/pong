@@ -22,6 +22,21 @@ constexpr int to_size_t(const T value)  requires std::floating_point<T> || std::
 
  
 
+// inline void randomize_dir(raylib::Vector2& vec)
+// {
+//     float r{sqrtf(vec.x*vec.x + vec.y*vec.y)};
+
+//     auto theta  = to_float(raylib::GetRandomValue(0, 2*PI));
+//     vec.x       = r*cosf(theta);
+//     vec.y       = r*sinf(theta);
+// }
+
+// inline raylib::Vector2 get_rand_vec(float magnitude)
+// {
+//     raylib::Vector2 vec{magnitude, 0};
+//     randomize_dir(vec);
+//     return vec;
+// }
 
 
 

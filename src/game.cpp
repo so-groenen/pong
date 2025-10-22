@@ -40,7 +40,9 @@ void Game::run()
     raylib::SetTargetFPS(TARGET_FPS);
     while (!raylib::WindowShouldClose())
     {
-        m_scene->update_logic();
+        float dt = raylib::GetFrameTime();
+
+        m_scene->update_logic(dt);
         raylib::draw(BACKGROUND_COLOR, m_camera, [&]
         {
             draw_playing_field(WIDTH, HEIGHT, OUTER_LINE_COLOR, FIELD_COLOR, LINE_THICKNESS);

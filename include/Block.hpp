@@ -6,7 +6,7 @@
 
 constexpr float BLOCK_WIDTH_RATIO      {0.05f}; // x windows width
 constexpr float BLOCK_HEIGHT_RATIO     {0.5f};   // x windows height
-constexpr float DEFAULT_VELOCITY_RATIO {0.02f};  // x windows height
+constexpr float DEFAULT_VELOCITY_RATIO {0.5f};  // x windows height
 
 
 class Block
@@ -15,7 +15,7 @@ class Block
     raylib::Rectangle m_rect{};
     float m_win_height{};
     float m_win_width{};
-    float m_delta_y{};   // By how much do we move?
+    float m_vy{};   // By how much do we move?
     int m_dir{};
 public:
     Block() = default;
@@ -31,15 +31,18 @@ public:
         m_rect.height  = BLOCK_HEIGHT_RATIO * m_win_height;
         m_rect.x       = position.x;
         m_rect.y       = position.y;
-        m_delta_y      = DEFAULT_VELOCITY_RATIO * m_win_height;
+        m_vy           = DEFAULT_VELOCITY_RATIO * m_win_height;
     }
     Block& operator=(const Block& other) = default;
-
-    void move_up()
+    void move_up(float dt)
     {
         if (m_rect.y > 0)
         {
-            m_rect.y -= m_delta_y;
+            m_rect.y -= m_vy*dt;
+        }
+        if (m_rect.y < 0)
+        {
+            m_rect.y = 0;
         }
         m_dir = -1; //direction are inverted!
     }
@@ -49,13 +52,20 @@ public:
     }
     float vertical_velocity() const 
     {
-        return m_dir*m_delta_y; 
+        return m_dir*m_vy; 
     }
-    void move_down()
+    void move_down(float dt)
     {
-        if (m_rect.y < (m_win_height - m_rect.height) )
+        static float bottom = m_win_height - m_rect.height; // bottom is down the screen, but goes up in graphics coordinates
+
+        if (m_rect.y < bottom)
         {
-            m_rect.y += m_delta_y;
+            m_rect.y += m_vy*dt;
+        }
+
+        if (m_rect.y > bottom)
+        {
+            m_rect.y = bottom;
         }
         m_dir = +1; //direction are inverted!
     }
@@ -63,10 +73,10 @@ public:
     {
         m_dir = 0;
     }
-    //velocity in [%_windows Height] pixel per 1/60 s. . 
-    void set_velocity(float p)
+    //velocity in [%_windows Height] pixel per 1/60 s.
+    void set_velocity(float v)
     {       
-        m_delta_y = p*m_win_height;
+        m_vy = v;
     }
     void draw() const
     {

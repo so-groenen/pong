@@ -15,7 +15,7 @@ class EndingScene : public IGameScene
 public:
     EndingScene(bool has_won);
     bool is_finished() const override;
-    void update_logic() override;
+    void update_logic(float dt) override;
     auto on_exit() -> std::unique_ptr<IGameScene> override;
     void draw() const override;
     ~EndingScene() = default;

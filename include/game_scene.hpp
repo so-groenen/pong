@@ -20,7 +20,7 @@ class GamePlayScene : public IGameScene
     bool m_is_finished{false};
 public:
     GamePlayScene(Difficulty difficulty);
-    void update_logic() override;
+    void update_logic(float dt) override;
     void draw() const override ;
     bool is_finished() const override ;
     auto on_exit() -> std::unique_ptr<IGameScene> override;

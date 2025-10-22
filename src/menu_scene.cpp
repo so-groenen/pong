@@ -45,7 +45,7 @@ MenuScene::MenuScene()
         throw std::runtime_error("Menu creation error: Window not ready!\n");
     }
 }
-void MenuScene::update_logic()
+void MenuScene::update_logic(float dt)
 {
     if (raylib::IsKeyPressed(raylib::KEY_DOWN))
     {

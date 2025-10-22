@@ -6,7 +6,7 @@
 #include "block.hpp"
 #include <print>
 
-constexpr float DRIFT_COEFF {0.3f};
+constexpr float DRIFT_COEFF {0.75f};
 
 inline void swap_texture(raylib::RenderTexture2D& t1, raylib::RenderTexture2D& t2)
 {
@@ -18,10 +18,10 @@ inline void swap_texture(raylib::RenderTexture2D& t1, raylib::RenderTexture2D& t
 class Ball
 {
     raylib::Vector2 m_position{};
-    raylib::Vector2 m_velocity{};
     raylib::Color m_color{raylib::VIOLET};
     raylib::RenderTexture2D m_render_tex{};
     float m_radius{};
+    raylib::Vector2 m_velocity{};
     float m_win_width{};
     float m_win_height{};
     inline bool is_below(float bottom) const
@@ -40,13 +40,13 @@ class Ball
     {
         return (m_position.x >= right);
     }
-    inline raylib::Vector2 next_pos() const 
+    inline raylib::Vector2 next_pos(float dt) const 
     {
-        return {m_position.x + m_velocity.x,m_position.y + m_velocity.y};
+        return m_position + m_velocity*dt;
     }
 public: 
-    explicit Ball(raylib::Vector2 velocity = (raylib::Vector2){5.f,5.f}, raylib::Color color = raylib::VIOLET, float r = 10)
-        : m_velocity{velocity}, m_color{color}, m_radius{r}
+    explicit Ball(raylib::Color color = raylib::VIOLET, float r = 10, raylib::Vector2 velocity = (raylib::Vector2){5.f,5.f})
+        : m_color{color}, m_radius{r}, m_velocity{velocity}
     {
         if(!raylib::IsWindowReady())
         {
@@ -97,16 +97,16 @@ public:
     {
         m_velocity = vel;
     }
-    void check_wall_collision()
+    void check_wall_collision(float dt)
     {
-        if (next_pos().y <= m_radius || next_pos().y >= (m_win_height - m_radius) )
+        if (next_pos(dt).y <= m_radius || next_pos(dt).y >= (m_win_height - m_radius) )
         {
             m_velocity.y *= -1;
         }
     }
-    void check_block_collision(const Block& block)
+    void check_block_collision(const Block& block, float dt)
     {
-        if (raylib::CheckCollisionCircleRec(next_pos(), m_radius, block.rect()))
+        if (raylib::CheckCollisionCircleRec(next_pos(dt), m_radius, block.rect()))
         {   
             float x_left   = block.rect().x;
             float x_right  = block.rect().x + block.rect().width;
@@ -148,10 +148,10 @@ public:
             m_velocity.y += DRIFT_COEFF * block.vertical_velocity();
         }
     }
-    void move()
+    void move(float dt)
     {
-        m_position.x += m_velocity.x;
-        m_position.y += m_velocity.y;
+        m_position.x += m_velocity.x*dt;
+        m_position.y += m_velocity.y*dt;
     }
     raylib::Vector2 position() const
     {

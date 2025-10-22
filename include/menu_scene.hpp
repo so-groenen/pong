@@ -54,7 +54,7 @@ class MenuScene : public IGameScene
     // raylib::Camera2D m_camera{create_default_camera2D()};
 public:
     MenuScene();
-    void update_logic() override;
+    void update_logic(float dt) override;
     bool is_finished() const override;
     void draw() const override;
     Difficulty get_difficulty() const ;

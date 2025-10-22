@@ -37,8 +37,27 @@ namespace raylib
             EndMode2D();
         EndDrawing();
     }
+    inline Vector2 operator*(const Vector2& vec, float s)
+    {
+        return {s*vec.x, s*vec.y};
+    }
+    inline Vector2 operator*(float s, const Vector2& vec)
+    {
+        return {s*vec.x, s*vec.y};
+    }
+    inline Vector2 operator+(Vector2 lhs, const Vector2& rhs)
+    {
+        return {lhs.x + rhs.x, lhs.y + rhs.y};
+    }
+    inline Vector2& operator+=(Vector2& lhs, const Vector2& rhs)
+    {
+        lhs.x += rhs.x;
+        lhs.y += rhs.y;
+        return lhs;
+    }
 }
+#include <cmath>
 #include <cstdint>
-
+ 
 
 #endif

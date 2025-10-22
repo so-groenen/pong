@@ -19,17 +19,17 @@ public:
     {
         m_line_of_sight = line_of_s;
     }
-    void move(const Ball& ball)
+    void move(const Ball& ball, float dt)
     {
         if (fabs(ball.position().x-center().x) < m_line_of_sight )
         {
             if (ball.position().y < center().y)
             {
-                move_up();
+                move_up(dt);
             }
             if (ball.position().y > center().y)
             {
-                move_down();
+                move_down(dt);
             }    
         }
         else
